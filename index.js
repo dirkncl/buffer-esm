@@ -96,14 +96,6 @@ export class Buffer extends Uint8Array {
     return Buffer.from(arg, encodingOrOffset, length)
   }
 
-  // This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
-  // to detect a Buffer instance. It's not possible to use `instanceof Buffer`
-  // reliably in a browserify context because there could be multiple different
-  // copies of the 'buffer' package in use. This method works even for Buffer
-  // instances that were created from another copy of the `buffer` package.
-  // See: https://github.com/feross/buffer/issues/154
-  _isBuffer = true
-
   get parent() {
     if (!Buffer.isBuffer(this)) return undefined
     return this.buffer
@@ -1528,6 +1520,14 @@ export class Buffer extends Uint8Array {
   }
 
 }
+
+// This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
+// to detect a Buffer instance. It's not possible to use `instanceof Buffer`
+// reliably in a browserify context because there could be multiple different
+// copies of the 'buffer' package in use. This method works even for Buffer
+// instances that were created from another copy of the `buffer` package.
+// See: https://github.com/feross/buffer/issues/154
+Buffer.prototype._isBuffer = true
 
 export function SlowBuffer(length) {
   if (+length != length) { // eslint-disable-line eqeqeq
